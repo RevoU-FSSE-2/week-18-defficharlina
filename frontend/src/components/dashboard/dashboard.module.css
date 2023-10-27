@@ -1,0 +1,19 @@
+.task-list-container {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.task-item {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.task-activity {
+  margin-top: 5px;
+}
