@@ -5,8 +5,11 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import PropTypes from "prop-types";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from '../../pages/function'
+//import { format, isDate } from 'date-fns';
 
 function Dashboard({ OwnerName, urlApi }) {
   const [data, setData] = useState([]);
@@ -33,7 +36,7 @@ function Dashboard({ OwnerName, urlApi }) {
 
   const fetchData = useCallback(() => {
     axios
-      .get(`${urlApi}/api/v1/tasks`)
+      .get(`${API_BASE_URL}/api/v1/tasks`)
       .then((response) => {
         setData(response.data.data);
       })
@@ -41,7 +44,7 @@ function Dashboard({ OwnerName, urlApi }) {
         console.error(error);
         setError(true);
       });
-  }, [setData, urlApi]);
+  }, [setData, API_BASE_URL]);
 
   useEffect(() => {
     fetchData();
@@ -83,7 +86,7 @@ function Dashboard({ OwnerName, urlApi }) {
   const handleCreateTask = () => {
     setLoading(true);
     axios
-      .post(`${urlApi}/api/v1/tasks`, newTaskData)
+      .post(`${API_BASE_URL}/api/v1/tasks`, newTaskData)
       .then((response) => {
         setLoading(false);
         const newTask = response.data.data;
@@ -105,7 +108,7 @@ function Dashboard({ OwnerName, urlApi }) {
 
   const handleEditTask = () => {
     axios
-      .put(`${urlApi}/api/v1/tasks/${editData?._id}`, editTaskData)
+      .put(`${API_BASE_URL}/api/v1/tasks/${editData?._id}`, editTaskData)
       .then((response) => {
         const newTask = response.data.data;
         console.log(newTask);
@@ -125,7 +128,7 @@ function Dashboard({ OwnerName, urlApi }) {
 
   const handleDelete = (itemId) => {
     axios
-      .delete(`${urlApi}/api/v1/tasks/${itemId}`)
+      .delete(`${API_BASE_URL}/api/v1/tasks/${itemId}`)
       .then((response) => {
         console.log(response.data);
         fetchData();
@@ -153,10 +156,9 @@ function Dashboard({ OwnerName, urlApi }) {
   return (
     <div>
       <h1>
-        {OwnerName}
-        {"'s"} My Tasks
+       My Tasks
       </h1>
-      <h2>Endpoint : {urlApi}</h2>
+      <h2>Endpoint : {API_BASE_URL}</h2>
       <Button variant="contained" color="primary" onClick={openModal}>
         Create Task
       </Button>
@@ -172,7 +174,7 @@ function Dashboard({ OwnerName, urlApi }) {
       {data ? (
         data.map((item) => (
           <div key={item._id} className="task-item">
-            <div>ID: {item._id}</div>
+            { /*<div>ID: {item._id}</div>*/ }
             <div>Name: {item.name}</div>
             <div>Activity: {item.activity}</div>
             <div>Priority: {item.priority}</div>
@@ -232,33 +234,40 @@ function Dashboard({ OwnerName, urlApi }) {
             fullWidth
             margin="normal"
           />
-          <TextField
-            label="Priority"
-            variant="outlined"
+        <FormControl fullWidth variant="outlined" margin="normal">
+          <InputLabel>Priority</InputLabel>
+          <Select
             name="priority"
-            value={newTaskData.activity}
+            value={newTaskData.priority}
             onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
+          >
+            <MenuItem value="Low">Low</MenuItem>
+            <MenuItem value="Medium">Medium</MenuItem>
+            <MenuItem value="High">High</MenuItem>
+          </Select>
+        </FormControl>
           <TextField
             label="Due Date"
             variant="outlined"
             name="due_date"
-            value={newTaskData.activity}
+            value={newTaskData.due_date}
             onChange={handleInputChange}
             fullWidth
             margin="normal"
           />
-          <TextField
-            label="Status"
-            variant="outlined"
-            name="status"
-            value={newTaskData.activity}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
+          <FormControl fullWidth variant="outlined" margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              name="status"
+              value={newTaskData.status}
+              onChange={handleInputChange}
+            >
+              <MenuItem value="To Do">To Do</MenuItem>
+              <MenuItem value="On Progress">On Progress</MenuItem>
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Done">Done</MenuItem>
+            </Select>
+          </FormControl>
           <Button
             variant="contained"
             color="primary"
@@ -302,15 +311,18 @@ function Dashboard({ OwnerName, urlApi }) {
             fullWidth
             margin="normal"
           />
-          <TextField
-            label="Priority"
-            variant="outlined"
-            name="priority"
-            value={editTaskData.priority || editData?.priority}
-            onChange={handleInputChangeEdit}
-            fullWidth
-            margin="normal"
-          />
+          <FormControl fullWidth variant="outlined" margin="normal">
+            <InputLabel>Priority</InputLabel>
+            <Select
+              name="priority"
+              value={editTaskData.priority || editData?.priority}
+              onChange={handleInputChangeEdit}
+            >
+              <MenuItem value="Low">Low</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="High">High</MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             label="Due Date"
             variant="outlined"
@@ -320,16 +332,20 @@ function Dashboard({ OwnerName, urlApi }) {
             fullWidth
             margin="normal"
           />
-          <TextField
-            label="Status"
-            variant="outlined"
-            name="status"
-            value={editTaskData.status || editData?.status}
-            onChange={handleInputChangeEdit}
-            fullWidth
-            margin="normal"
-          />
-          <Button variant="contained" color="primary" onClick={handleEditBook}>
+          <FormControl fullWidth variant="outlined" margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              name="status"
+              value={editTaskData.status || editData?.status}
+              onChange={handleInputChangeEdit}
+            >
+              <MenuItem value="To Do">To Do</MenuItem>
+              <MenuItem value="On Progress">On Progress</MenuItem>
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Done">Done</MenuItem>
+            </Select>
+          </FormControl>
+          <Button variant="contained" color="primary" onClick={handleEditTask}>
             Edit
           </Button>
         </Box>
