@@ -145,8 +145,8 @@ firebase deploy --only hosting:
 ```
 
 
-
-[Try me!!](https://week-17-defficharlina.web.app)
+[Documentation](https://documenter.getpostman.com/view/29077541/2s9YRGwoWD)
+[Link Backend](https://us-central1-revou-batch-june.cloudfunctions.net/week_18_defficharlina)
 
 
 
